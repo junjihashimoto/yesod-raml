@@ -1,0 +1,14 @@
+#%RAML 0.8
+title: Hoge API
+baseUri: 'https://hoge/api/{version}'
+version: v1
+protocols: [ HTTPS ]
+/user:
+  /{userid}:
+    handler: HogeR
+    get:
+      description: Get user list
+    /del:
+      handler: Hoge2R
+      post:
+        description: Delete user
