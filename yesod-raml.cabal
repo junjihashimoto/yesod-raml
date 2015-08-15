@@ -1,5 +1,5 @@
 name:                yesod-raml
-version:             0.1.1
+version:             0.1.2
 synopsis:            RAML style route definitions for Yesod
 description:         RAML style route definitions for Yesod
 license:             MIT
@@ -9,7 +9,9 @@ maintainer:          junji.hashimoto@gmail.com
 category:            Web, Yesod
 build-type:          Simple
 cabal-version:       >=1.10
-extra-source-files:  ChangeLog.md README.md
+extra-source-files:   ChangeLog.md
+                    , README.md
+                    , tests/test.raml
 
 flag utils
   description: Build utility programs
