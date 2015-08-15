@@ -60,7 +60,7 @@ As you can see, ```{userid}``` becomes ```#Userid```.
 type Userid = String
 
 mkYesod "App" [parseRoutes|
-/user/#Userid HogeR GET
-/user/#Userid/del Hoge2R POST
+/api/v1/user/#Userid HogeR GET
+/api/v1/user/#Userid/del Hoge2R POST
 |]
 ```
