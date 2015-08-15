@@ -1,4 +1,8 @@
-## 0.1.1.1
+## 0.1.3
+
+* Fix cabal-file (Just add bug-reports and source-repository)
+
+## 0.1.2
 
 * Fix cabal-file (Just add tests/test.raml)
 
