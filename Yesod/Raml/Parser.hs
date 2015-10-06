@@ -33,8 +33,15 @@ toResponse hashmap = do
 
 toMethod :: Object -> Parser (Map Text RamlMethod)
 toMethod hashmap = do
-  let methods = filter (\(k,_) ->  elem k ["get","post","delete","put", "options",
-                                            "GET","POST","DELETE","PUT", "OPTIONS"
+  let methods = filter (\(k,_) ->  elem k ["get",     "GET",
+                                           "post",    "POST",
+                                           "head",    "HEAD",
+                                           "delete",  "DELETE",
+                                           "trace",   "TRACE",
+                                           "connect", "CONNECT",
+                                           "put",     "PUT",
+                                           "options", "OPTIONS",
+                                           "patch",   "PATCH"
                                            ]
                        ) (HM.toList hashmap)
   list <- forM methods $ \(k,v) -> do

@@ -1,3 +1,7 @@
+## 0.1.4
+
+* Add OPTIONS and other http methods.
+
 ## 0.1.3
 
 * Fix cabal-file (Just add bug-reports and source-repository)
