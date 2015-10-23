@@ -1,3 +1,7 @@
+## 0.1.5
+
+* Fix parser, because parser does not work when single line has multi variables like /api/{String}/{String}.
+
 ## 0.1.4
 
 * Add OPTIONS and other http methods.
