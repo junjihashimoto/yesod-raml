@@ -1,0 +1,14 @@
+<h1>Welcome to Yesod Raml!
+
+<ul>
+  <li>
+    <a href=@{HelpR}>
+      Raml2Html Demo for yesod-raml-docs
+  <li>
+    <a href=@{UserR}>
+      Mock Output Demo for yesod-raml-mock
+  <li>
+    <a href=@{RamlR}>
+      Original Raml File
+    
+

@@ -1,0 +1,134 @@
+name:              yesod-raml-mock-server
+version:           0.1.0
+cabal-version:     >= 1.8
+build-type:        Simple
+
+Flag dev
+    Description:   Turn on development settings, like auto-reload templates.
+    Default:       False
+
+Flag library-only
+    Description:   Build for use with "yesod devel"
+    Default:       False
+
+library
+    hs-source-dirs: ., app
+    exposed-modules: Application
+                     Foundation
+                     Import
+                     Import.NoFoundation
+                     Model
+                     Settings
+                     Settings.StaticFiles
+                     Handler.Common
+                     Handler.Home
+                     Handler.Board
+
+    if flag(dev) || flag(library-only)
+        cpp-options:   -DDEVELOPMENT
+        ghc-options:   -Wall -fwarn-tabs -O0
+    else
+        ghc-options:   -Wall -fwarn-tabs -O2
+
+    extensions: TemplateHaskell
+                QuasiQuotes
+                OverloadedStrings
+                NoImplicitPrelude
+                CPP
+                MultiParamTypeClasses
+                TypeFamilies
+                GADTs
+                GeneralizedNewtypeDeriving
+                FlexibleContexts
+                EmptyDataDecls
+                NoMonomorphismRestriction
+                DeriveDataTypeable
+                ViewPatterns
+                TupleSections
+                RecordWildCards
+
+    build-depends: base                          == 4.*
+                 , yesod
+                 , yesod-core
+                 , yesod-auth
+                 , yesod-static
+                 , yesod-form
+                 , yesod-raml
+                 , yesod-raml-docs
+                 , yesod-raml-mock
+                 , classy-prelude
+                 , classy-prelude-conduit
+                 , classy-prelude-yesod
+                 , bytestring
+                 , text
+                 , persistent
+                 , persistent-sqlite
+                 , persistent-template
+                 , template-haskell
+                 , shakespeare
+                 , hjsmin
+                 , monad-control
+                 , wai-extra
+                 , yaml
+                 , http-conduit
+                 , directory
+                 , warp
+                 , data-default
+                 , aeson
+                 , conduit
+                 , monad-logger
+                 , fast-logger
+                 , wai-logger
+                 , file-embed
+                 , safe
+                 , unordered-containers
+                 , containers
+                 , vector
+                 , time
+
+executable         yesod-raml-mock-server
+    if flag(library-only)
+        Buildable: False
+
+    main-is:           main.hs
+    hs-source-dirs:    app
+    build-depends:     base, yesod-raml-mock-server
+
+    ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
+
+test-suite test
+    type:              exitcode-stdio-1.0
+    main-is:           Spec.hs
+    hs-source-dirs:    test
+    ghc-options:       -Wall
+
+    extensions: TemplateHaskell
+                QuasiQuotes
+                OverloadedStrings
+                NoImplicitPrelude
+                CPP
+                MultiParamTypeClasses
+                TypeFamilies
+                GADTs
+                GeneralizedNewtypeDeriving
+                FlexibleContexts
+                EmptyDataDecls
+                NoMonomorphismRestriction
+                DeriveDataTypeable
+                ViewPatterns
+                TupleSections
+
+    build-depends: base
+                 , yesod-raml-mock-server
+                 , yesod-test >= 1.4.3 && < 1.5
+                 , yesod-core
+                 , yesod
+                 , persistent
+                 , persistent-sqlite
+                 , resourcet
+                 , monad-logger
+                 , shakespeare
+                 , transformers
+                 , hspec >= 2.0.0
+                 , classy-prelude
+                 , classy-prelude-yesod

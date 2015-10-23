@@ -1,0 +1,2 @@
+database:
+  database: yesod-raml-sample_test.sqlite3
