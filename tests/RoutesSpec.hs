@@ -71,6 +71,20 @@ protocols: [ HTTPS ]
         description: hoger
 |]
 
+routea'' :: [ResourceTree String]
+routea'' = [parseRamlRoutes|
+#%RAML 0.8
+title: Hoge API
+baseUri: 'https://hoge/api/{version}'
+version: v1
+protocols: [ HTTPS ]
+/user/{userid}/{String}:
+    description: |
+      handler:HogeR
+    get:
+      description: hoger
+|]
+
 routeb = [parseRoutes|
 /api/v1/user/#String HogeR GET POST
 /api/v1/user/#String/del Hoge2R POST
@@ -81,6 +95,21 @@ routeb' = [parseRoutes|
 /api/v1/user/#Userid/del Hoge2R POST
 |]
 
+routec = [parseRoutes|
+/api/v1/user/#Userid/#String HogeR GET
+|]
+
+emptyMethod = 
+  RamlMethod {
+    m_responses = M.empty
+  , m_description = Nothing
+  , m_headers = M.empty
+  , m_securedBy = []
+  , m_protocols = []
+  , m_queryParameters = M.empty
+  , m_body = M.empty
+  , m_is = []
+  }
 
 main :: IO ()
 main = hspec $ do
@@ -91,8 +120,12 @@ main = hspec $ do
             r_displayName = Nothing
           , r_description = Just "handler: hogehoge\n"
           , r_handler = Nothing
-          , r_methods = M.fromList [("GET",RamlMethod M.empty)]
+          , r_methods = M.fromList [("GET",emptyMethod)]
           , r_paths = M.empty
+          , r_uriParameters = M.empty
+          , r_baseUriParameters = M.empty
+          , r_type = Nothing
+          , r_is = []
           } ) `shouldBe` Right "hogehoge"
     it "parse handler from description" $ do
       toHandler Nothing
@@ -100,8 +133,12 @@ main = hspec $ do
             r_displayName = Nothing
           , r_description = Just "burabura\nhandler: hogehoge\n"
           , r_handler = Nothing
-          , r_methods = M.fromList [("GET",RamlMethod M.empty)]
+          , r_methods = M.fromList [("GET",emptyMethod)]
           , r_paths = M.empty
+          , r_uriParameters = M.empty
+          , r_baseUriParameters = M.empty
+          , r_type = Nothing
+          , r_is = []
           } ) `shouldBe` Right "hogehoge"
     it "parse handler from handler" $ do
       toHandler Nothing
@@ -109,13 +146,19 @@ main = hspec $ do
             r_displayName = Nothing
           , r_description = Just "handler: hogehoge\n"
           , r_handler = Just "hoge"
-          , r_methods = M.fromList [("GET",RamlMethod M.empty)]
+          , r_methods = M.fromList [("GET",emptyMethod)]
           , r_paths = M.empty
+          , r_uriParameters = M.empty
+          , r_baseUriParameters = M.empty
+          , r_type = Nothing
+          , r_is = []
           } ) `shouldBe` Right "hoge"
   describe "resource tree" $ do
     it "parseRamlRoutes from handler" $ do
       routea `shouldBe` routeb
     it "parseRamlRoutes from description" $ do
       routea' `shouldBe` routeb'
+    it "check multi value" $ do
+      routea'' `shouldBe` routec
     it "parseRamlRoutesFile" $ do
       $(parseRamlRoutesFile "tests/test.raml") `shouldBe` routeb'

@@ -20,7 +20,7 @@ import Language.Haskell.TH.Syntax
 import Language.Haskell.TH.Quote
 
 import Yesod.Routes.TH.Types
-import Network.URI
+import Network.URI hiding (path)
 
 routesFromRaml :: Raml -> Either String [RamlRoute]
 routesFromRaml raml = do
@@ -29,15 +29,21 @@ routesFromRaml raml = do
     (Just uri) -> return $ fmap ("/" <> ) $ T.split (== '/') $ if T.isPrefixOf "/" uri then T.tail uri else uri
     Nothing -> Left $ "can not parse: " ++  (T.unpack buri)
   v <- forM (M.toList (paths raml)) $ \(k,v) -> do
-    routesFromRamlResource v $ uripaths ++ [k]
+    routesFromRamlResource v $ uripaths ++ splitPath k
   return $ concat v
   where
     parsePath uri = fmap T.pack $ fmap uriPath $ parseURI (T.unpack uri)
 
+splitPath :: T.Text -> [T.Text]
+splitPath path = 
+  case T.split (== '/') path of
+    (_:xs) -> map (T.append "/") xs
+    _  -> [path]
+
 routesFromRamlResource :: RamlResource -> [Path] -> Either String [RamlRoute]
 routesFromRamlResource raml paths' = do
   rrlist <- forM (M.toList (r_paths raml)) $ \(k,v) -> do
-    routesFromRamlResource v (paths' ++ [k])
+    routesFromRamlResource v (paths' ++ splitPath k)
   let rlist = concat rrlist
   case toHandler Nothing raml of
     Right handle -> do
