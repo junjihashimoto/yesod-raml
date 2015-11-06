@@ -3,9 +3,9 @@
 Yesod-Raml-Bin is a utility program for yesod-raml.
 The functions are below.
 
-1, Verify RAML format
-2, Convert RAML to HTML
-3, Convert RAML to Yesod-Route file
+- Verify RAML format
+- Convert RAML to HTML
+- Convert RAML to Yesod-Route file
 
 
 ## Usage
