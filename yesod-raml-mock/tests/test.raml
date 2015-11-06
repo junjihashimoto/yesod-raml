@@ -1,0 +1,14 @@
+title: Hoge API
+baseUri: 'https://hoge/api/{version}'
+version: v1
+protocols: [ HTTPS ]
+/user:
+  /{String}:
+    handler: HogeR
+    get:
+      description: hoger
+      responses:
+        200:
+          body:
+            application/json:
+              example: '{ "test": "123" }'

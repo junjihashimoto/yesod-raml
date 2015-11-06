@@ -1,0 +1,179 @@
+$if haveMethod res
+    <div .panel .panel-white>
+        <div .panel-heading>
+            <h4 .panel-title>
+                <a .collapsed data-toggle="collapse" href="#panel_#{docId (T.append puri ruri)}">
+                    <span .parent>
+                        #{puri}
+                    #{ruri}
+                <span .methods>
+                    $forall (mname,method) <- M.toList (r_methods res)
+                        <a href="##{docId (T.append puri ruri)}_#{mname}">
+                            $#  modal shown by hashchange event 
+                            <span .badge .badge_#{mname}>
+                                $if null (m_securedBy method)
+                                    #{mname}
+                                $else
+                                    #{mname}<span .glyphicon .glyphicon-lock title="Authentication required">
+        <div .panel-collapse .collapse #panel_#{docId (T.append puri ruri)}>
+            <div .panel-body>
+                $maybe desc <- r_description res 
+                  <div .resource-description>
+                    ^{txt2md desc}
+                <div .list-group>
+                    $forall (mname,method) <- M.toList (r_methods res)
+                        <div .list-group-item onclick="window.location.href = '##{docId (T.append puri ruri)}_#{mname}'">
+                            <span .badge .badge_#{mname}>
+                                $if null (m_securedBy method)
+                                    #{mname}
+                                $else
+                                    #{mname}<span .glyphicon .glyphicon-lock title="Authentication required">
+                            <div .method_description>
+                                $maybe desc <- m_description method
+                                    ^{txt2md desc}
+                            <div .clearfix>
+        $forall (mname,method) <- M.toList (r_methods res)
+            <div .modal .fade ##{docId (T.append puri ruri)}_#{mname} tabindex="0">
+                <div .modal-dialog>
+                    <div .modal-content>
+                        <div .modal-header>
+                            <button aria-hidden="true" .close data-dismiss="modal" type="button">
+                                ×
+                            <h4 .modal-title #myModalLabel>
+                                <span .badge .badge_#{mname}>
+                                    $if null (m_securedBy method)
+                                        #{mname}
+                                    $else
+                                        #{mname}<span .glyphicon .glyphicon-lock title="Authentication required">
+                                <span .parent>
+                                    #{puri}
+                                #{ruri}
+                        <div .modal-body>
+                            $maybe desc <- m_description method
+                                <div .alert .alert-info>
+                                    ^{txt2md desc}
+                            
+                            $forall securedby <- m_securedBy method
+                                <div .alert .alert-warning>
+                                    <span .glyphicon .glyphicon-lock title="Authentication required">
+                                    Secured by #{securedby}
+                                        $maybe scheme <- findAuth securedby raml
+                                            $maybe desc <- ss_description scheme
+                                                ^{txt2md desc}
+    
+                            $#  Nav tabs 
+                            <ul .nav .nav-tabs>
+                                $if haveParam res method
+                                    <li .active>
+                                        <a data-toggle="tab" href="##{docId (T.append puri ruri)}_#{mname}_request">
+                                            Request
+                                
+                                $if (not (M.null (m_responses method)))
+                                    <li>
+                                        <a data-toggle="tab" href="##{docId (T.append puri ruri)}_#{mname}_response">
+                                            Response
+    
+                            
+                            $#  Tab panes 
+                            <div .tab-content>
+                                $if haveParam res method
+                                                  
+                                    <div .tab-pane .active ##{docId (T.append puri ruri)}_#{mname}_request>
+                                        $if haveResourceParam res
+                                            <h3>
+                                                URI Parameters
+                                            <ul>
+                                                $forall (key,item) <- M.toList (r_uriParameters res <> r_baseUriParameters res)
+                                                    ^{items key item}
+                                        
+                                        $if not (M.null (m_headers method))
+                                            <h3>
+                                                Headers
+                                            <ul>
+                                                $forall (key,item) <- M.toList (m_headers method)
+                                                    ^{items key item}
+                                                                  
+                                        $if not (M.null (m_queryParameters method))
+                                            <h3>
+                                                Query Parameters
+                                            <ul>
+                                                $forall (key,item) <- M.toList (m_queryParameters method)
+                                                    ^{items key item}
+    
+                                        $if not (M.null (m_body method))
+                                            <h3>
+                                                Body
+                                            $forall (key,b) <- M.toList (m_body method)
+                                                <p>
+                                                    <strong>
+                                                        Type: #{key}
+                                                $if not (M.null (req_formParameters b))
+                                                    <strong>
+                                                        Form Parameters
+                                                    <ul>
+                                                        $forall (key,item) <- M.toList (req_formParameters b)
+                                                            ^{items key item}
+                                                
+                                                $maybe s <- req_schema b
+                                                    <p>
+                                                        <strong>
+                                                            Schema
+                                                        :
+                                                    <pre>
+                                                        <code>
+                                                            #{s}
+                                                
+                                                $maybe s <- req_example b
+                                                    <p>
+                                                        <strong>
+                                                            Example
+                                                        :
+                                                    <pre>
+                                                        <code>
+                                                            #{s}
+                                              
+                                $if (not (M.null (m_responses method)))
+                                    <div .tab-pane ##{docId (T.append puri ruri)}_#{mname}_response>
+                                        $forall (key,response) <- M.toList (m_responses method)
+                                            <h2>
+                                                HTTP status code 
+                                                <a href="http://httpstatus.es/#{key}" target="_blank">
+                                                    #{key}
+                                            $maybe desc <- res_description response
+                                                ^{txt2md desc}
+                                            
+                                            $if (not (M.null (res_headers response)))
+                                                <h3>
+                                                    Headers
+                                                <ul>
+                                                    $forall (key,item) <- M.toList (res_headers response)
+                                                         ^{items key item}
+                                                
+                                            $if (not (M.null (res_body response)))
+                                                                    
+                                                <h3>
+                                                    Body
+                                                $forall (key,b) <- M.toList (res_body response)
+                                                    <p>
+                                                        <strong>
+                                                            Type: #{key}
+    
+                                                    $maybe s <- res_schema b
+                                                        <p>
+                                                            <strong>
+                                                                Schema
+                                                            :
+                                                        <pre>
+                                                            <code>
+                                                                #{s}
+                                                        
+                                                    $maybe s <- res_example b
+                                                        <p>
+                                                            <strong>
+                                                                Example
+                                                            :
+                                                        <pre>
+                                                            <code>
+                                                                #{s}
+$forall (uri,resource) <- M.toList (r_paths res)
+    ^{resources raml resource (T.append puri ruri) uri}

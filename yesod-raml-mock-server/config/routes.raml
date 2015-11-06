@@ -1,0 +1,119 @@
+#%RAML 0.8
+title: Reversi
+baseUri: 'https://reversi/api/{version}'
+version: v1
+protocols: [ HTTPS ]
+documentation:
+  - title: Home
+    content: |
+      Welcome to the Reversi API Documentation.
+
+/board:
+  displayName: Board Control
+  description: |
+    handler: InitR
+  post:
+    description: get session id
+    responses:
+      200:
+        body:
+          application/json:
+            schema: |
+              {
+                 "sessionId": "string"
+              }
+            example: |
+              {
+                 "sessionId": "1234"
+              }
+  /{Session}:
+    description: |
+      handler: BoardR
+    get:
+      description: get board
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                {
+                   "status": ["white-turn","black-turn","white-win","black-win"],
+                   "disks":
+                     [
+                       {
+                          "x": "integer",
+                          "y": "integer",
+                          "color": "string"
+                       }
+                     ]
+                 }
+              example: |
+                {
+                   "status": "white-turn",
+                   "disks":
+                     [
+                       {
+                           "x": 4,
+                           "y": 4,
+                           "color": "black"
+                       },
+                       {
+                           "x": 5,
+                           "y": 5,
+                           "color": "black"
+                       },
+                       {
+                           "x": 4,
+                           "y": 5,
+                           "color": "white"
+                       },
+                       {
+                           "x": 5,
+                           "y": 4,
+                           "color": "white"
+                       }
+                     ]
+                 }
+                ]
+    /{XPos}/{YPos}:
+      description: |
+        handler: DiskR
+      post:
+        description: put disk
+        responses:
+          200:
+            body:
+              application/json:
+                schema: |
+                  {
+                     "status": [ "accept", "deny" ]
+                  }
+                example: |
+                  {
+                     "status": "accept" 
+                  }
+/acount:
+  displayName: Account Control
+  /user:
+    description: |
+      handler: UserR
+    get:
+      description: get user list
+      responses:
+        200:
+          body:
+            application/json:
+              schema: |
+                [
+                   {
+                      "id": "string"
+                      "name": "string"
+                   }
+                ]
+              example: |
+                [
+                   {
+                      "id": "123",
+                      "name": "taro"
+                   }
+                ]

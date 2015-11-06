@@ -1,0 +1,20 @@
+Default: &defaults
+  database: yesod-raml-sample.sqlite3
+  poolsize: 10
+
+Development:
+  <<: *defaults
+
+Testing:
+  database: yesod-raml-sample_test.sqlite3
+  <<: *defaults
+
+Staging:
+  database: yesod-raml-sample_staging.sqlite3
+  poolsize: 100
+  <<: *defaults
+
+Production:
+  database: yesod-raml-sample_production.sqlite3
+  poolsize: 100
+  <<: *defaults

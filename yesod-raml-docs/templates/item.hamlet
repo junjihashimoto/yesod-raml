@@ -1,0 +1,53 @@
+<li>
+    $maybe s <- h_displayName item
+        <strong>
+            #{s}
+        :
+    $nothing
+        <strong>
+            #{key}
+        :
+      
+    <em>
+        $maybe s <- h_required item
+            required 
+        (
+        $if not (null (h_enum item))
+            one of #{T.intercalate "," (h_enum item)}
+        $else
+            $maybe s <- h_type item
+                #{s}
+        
+        $maybe s <- h_default item
+            - default: #{s}
+        $maybe s <- h_repeat item
+            - repeat: #{s}
+        $if (h_type item == Just "string")
+          $maybe s <- h_minLength item
+              - minLength: #{s}
+          $maybe s <- h_maxLength item
+              - maxLength: #{s}
+        $else
+          $maybe s <- h_minimum item
+              - minimum: #{s}
+          $maybe s <- h_maximum item
+              - maximum: #{s}
+        $maybe s <- h_pattern item
+            - pattern: #{s}
+        )
+    
+    $maybe s <- h_description item
+        ^{txt2md s}
+    
+    $maybe s <- h_example item
+        <p>
+            <strong>
+                Example
+            :
+        $if (h_type item == Just "string")
+            <pre>
+                #{s}
+        $else
+            <pre>
+                <code>
+                    #{s}

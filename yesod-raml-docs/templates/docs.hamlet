@@ -1,0 +1,57 @@
+$doctype 5
+<html>
+    <head>
+        <title>
+            #{title raml} API documentation
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta content="https://github.com/junjihashimoto/yesod-raml #{yesodRamlDocsVersion}" name="generator">
+        <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/default.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript">
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" type="text/javascript">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js" type="text/javascript">
+        <script type="text/javascript">
+            ^{scriptBody}
+        <style>
+            ^{styleBody}
+    <body data-spy="scroll" data-target="#sidebar">
+        <div .container>
+            <div .row>
+                <div .col-md-9 role="main">
+                    <div .page-header>
+                        <h1>
+                            #{title raml} API documentation
+                            <small>
+                                version #{version raml}
+                        <p>
+                            #{baseUri raml}
+                        $forall doc <- documentation raml
+                            <h3 ##{docId (doc_title doc)}>
+                                <a href="##{docId (doc_title doc)}">
+                                    #{doc_title doc}
+                            ^{txt2md (doc_content doc)}
+                    $forall (uri,resource) <- M.toList (paths raml)
+                        <div .panel .panel-default>
+                            <div .panel-heading>
+                                <h3 .panel-title ##{docId uri}>
+                                    $maybe name <- r_displayName resource
+                                        #{name}
+                                    $nothing
+                                        #{uri}
+                            <div .panel-body>
+                                $maybe txt <- r_description resource
+                                    <div .top-resource-description>
+                                        ^{txt2md txt}
+                                <div .panel-group>
+                                    ^{resources raml resource "" uri}
+                <div .col-md-3>
+                    <div .hidden-print .affix #sidebar role="complementary">
+                        <ul .nav .nav-pills .nav-stacked>
+                            $forall (uri,resource) <- M.toList (paths raml)
+                                <li>
+                                    <a href="##{docId uri}">
+                                        $maybe name <- r_displayName resource
+                                            #{name}
+                                        $nothing
+                                            #{uri}

@@ -1,0 +1,17 @@
+*.hi
+*.o
+*.o_p
+*.swp
+*~
+.bash_history
+.cabal
+.cabal-sandbox/
+.ghc
+.hsenv/
+.stack-work
+.stackage
+cabal-dev/
+cabal.sandbox.config
+client_session_key.aes
+dist-stack/
+dist/
