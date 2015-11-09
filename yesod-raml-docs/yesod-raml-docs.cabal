@@ -1,5 +1,5 @@
 name:                yesod-raml-docs
-version:             0.1.0
+version:             0.1.1
 synopsis:            A html documentation generator library for RAML.
 description:         A html documentation generator library for RAML.
 license:             MIT
@@ -11,6 +11,11 @@ build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:   ChangeLog.md
                     , README.md
+                    , templates/item.hamlet
+                    , templates/style.hamlet
+                    , templates/docs.hamlet
+                    , templates/script.hamlet
+                    , templates/resource.hamlet
 
 bug-reports:         https://github.com/junjihashimoto/yesod-raml/issues
 
