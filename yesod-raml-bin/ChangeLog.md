@@ -1,3 +1,8 @@
+## 0.1.2
+
+* Add pretty print for mock-handler
+* Add mock-server function
+
 ## 0.1.1
 
 * Fix README

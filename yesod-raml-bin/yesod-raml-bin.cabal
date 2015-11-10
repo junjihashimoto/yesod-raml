@@ -1,5 +1,5 @@
 name:                yesod-raml-bin
-version:             0.1.1
+version:             0.1.2
 synopsis:            The raml helper executable.
 description:         Provides html documentation and route file generator
 license:             MIT
@@ -26,7 +26,10 @@ executable yesod-raml-bin
   build-depends:       base ==4.*
                      , yesod-raml == 0.2.*
                      , yesod-raml-docs == 0.1.*
+                     , yesod-raml-mock == 0.1.*
                      , yesod-markdown
+                     , yesod-core
+                     , http-types
                      , shakespeare
                      , blaze-markup
                      , blaze-html
@@ -36,5 +39,7 @@ executable yesod-raml-bin
                      , yaml
                      , bytestring
                      , template-haskell
+                     , warp
+                     , wai
   default-language:    Haskell2010
   ghc-options:       -Wall

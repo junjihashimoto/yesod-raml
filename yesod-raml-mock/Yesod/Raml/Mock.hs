@@ -7,6 +7,7 @@
 module Yesod.Raml.Mock (
   parseRamlMockFile
 , mockFromRaml
+, mockSrcFromRaml
 ) where
 
 import Yesod.Raml.Routes
@@ -16,6 +17,7 @@ import Control.Monad
 import Yesod.Core
 import Data.Char(toLower)
 import Language.Haskell.TH.Syntax
+import Language.Haskell.TH.Ppr
 import Yesod.Raml.Type
 import Yesod.Raml.Parser ()
 import Yesod.Routes.TH.Types
@@ -41,6 +43,11 @@ mockFromRaml raml = do
     Right routes ->  do
       decs <-  forM routes handlerFromRoute
       return $ concat decs
+
+mockSrcFromRaml ::  Raml ->  IO String
+mockSrcFromRaml raml = do
+  v <-  runQ $ mockFromRaml raml
+  return $ show $ ppr v
 
 handlerFromRoute ::  RouteEx ->  Q [Dec]
 handlerFromRoute RouteEx{..} = do
@@ -98,6 +105,7 @@ handlerFromRoute' paths handler MethodEx{..} = do
     typeList [] v =  v
     typeList (x:xs) v = (AppT (AppT ArrowT (ConT x)) (typeList xs v))
     wildPs xs = map (\_ ->  WildP) xs
+
 
 argsFromPiecies ::  [Piece String] ->  [Name]
 argsFromPiecies [] = []
